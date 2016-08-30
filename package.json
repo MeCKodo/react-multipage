@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "api": " NODE_ENV=dev supervisor ./src/mock/app.js",
-    "wapi": "set NODE_ENV=dev&&supervisor ./src/mock/app.js"
+
   },
   "author": "",
   "license": "ISC",
@@ -34,7 +33,6 @@
     "gulp-base64": "^0.1.3",
     "gulp-html-replace": "^1.5.5",
     "gulp-if-else": "^1.0.3",
-    "gulp-inline-source": "^2.1.0",
     "gulp-postcss": "^6.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",

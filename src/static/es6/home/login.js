@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(55);
+	module.exports = __webpack_require__(56);
 
 
 /***/ },
@@ -966,7 +966,13 @@
 				return _react2.default.createElement(
 					'header',
 					null,
-					'我是home业务模块下的,header组件,修改了我home业务模块下的js都会被编译'
+					'我是home业务模块下的,header组件,修改了我home业务模块下的js都会被编译',
+					_react2.default.createElement(
+						'figure',
+						null,
+						_react2.default.createElement('img', { style: { display: 'block' }, src: __webpack_require__(54), width: '100', height: '100' }),
+						'测试引入资源文件'
+					)
 				);
 			}
 		}]);
@@ -976,13 +982,19 @@
 	exports.default = top;
 
 /***/ },
-/* 54 */,
-/* 55 */
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/logo.jpg?82ceb5918f";
+
+/***/ },
+/* 55 */,
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _loginBtn = __webpack_require__(56);
+	var _loginBtn = __webpack_require__(57);
 
 	var _loginBtn2 = _interopRequireDefault(_loginBtn);
 
@@ -991,7 +1003,7 @@
 	ReactDOM.render(React.createElement(_loginBtn2.default, null), document.getElementById('container'));
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

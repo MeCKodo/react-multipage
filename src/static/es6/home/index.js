@@ -99,7 +99,7 @@
 
 	var _homeHeader2 = _interopRequireDefault(_homeHeader);
 
-	var _loading = __webpack_require__(54);
+	var _loading = __webpack_require__(55);
 
 	var _loading2 = _interopRequireDefault(_loading);
 
@@ -1054,7 +1054,13 @@
 				return _react2.default.createElement(
 					'header',
 					null,
-					'我是home业务模块下的,header组件,修改了我home业务模块下的js都会被编译'
+					'我是home业务模块下的,header组件,修改了我home业务模块下的js都会被编译',
+					_react2.default.createElement(
+						'figure',
+						null,
+						_react2.default.createElement('img', { style: { display: 'block' }, src: __webpack_require__(54), width: '100', height: '100' }),
+						'测试引入资源文件'
+					)
 				);
 			}
 		}]);
@@ -1065,6 +1071,12 @@
 
 /***/ },
 /* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/logo.jpg?82ceb5918f";
+
+/***/ },
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
