@@ -3,7 +3,8 @@ const path = require('path');
 const gulp = require('gulp');
 const ugjs = require('gulp-uglify');
 const watch = require('gulp-watch');
-const webpack = require('webpack-stream');
+const webpackStream = require('webpack-stream');
+const webpack = require('webpack');
 const named = require('vinyl-named');
 const del = require('del');
 const watchPath = require('gulp-watch-path');
@@ -11,7 +12,6 @@ const replace = require('gulp-replace');
 
 const rev = require('gulp-rev');
 const ifElse = require('gulp-if-else');
-const htmlreplace = require('gulp-html-replace');
 const browserSync = require('browser-sync').create();
 const base64 = require('gulp-base64');
 const runSequence = require('run-sequence');
@@ -29,6 +29,9 @@ const CDN = 'yourCDNLink';
 const webpackConfig = {
 	resolve: {
 		root: path.join(__dirname, 'node_modules'),
+		alias: {
+			components: '../../components' // 组件别名,js里引用路径可直接 'components/xxx/yyy'
+		},
 		extensions: ['', '.js', '.jsx', '.scss', '.css']
 	},
 	output: {
@@ -65,6 +68,7 @@ const webpackConfig = {
 			}
 		]
 	},
+	plugins: [],
 	babel: { //配置babel
 		"presets": ["es2015",'stage-2','react'],
 		"plugins": ["transform-runtime"]
@@ -100,6 +104,9 @@ const dist = {
 var BUILD = 'DEV';
 gulp.task('build', function () {
 	BUILD = 'PUBLIC';
+	webpackConfig.plugins.push(new webpack.DefinePlugin({
+		NODE_ENV: JSON.stringify(process.env.NODE_ENV) || 'production'
+	}));
 	build(function() {
 		del(['./src/tmp'])
 	});
@@ -112,6 +119,9 @@ gulp.task('reload', function () {
 		},
 		notify: false
 	});
+	webpackConfig.plugins.push(new webpack.DefinePlugin({
+		NODE_ENV: JSON.stringify(process.env.NODE_ENV) || 'dev'
+	}));
 	init();// watch
 });
 gulp.task('css:dev', function () {
@@ -257,7 +267,7 @@ function compileJS(path,dest) {
 		var target = path.split('/js/')[1];
 		return target.substring(0,target.length - 3);
 	}))
-	.pipe(webpack(webpackConfig))
+	.pipe(webpackStream(webpackConfig))
 	.on('error',function(err) {
 		this.end()
 	})

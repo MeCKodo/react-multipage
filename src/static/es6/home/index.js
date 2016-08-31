@@ -57,8 +57,13 @@
 
 	var _indexInfo2 = _interopRequireDefault(_indexInfo);
 
+	var _ajaxurl = __webpack_require__(56);
+
+	var _ajaxurl2 = _interopRequireDefault(_ajaxurl);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	console.log(_ajaxurl2.default); // 根据NODE_DEV环境变量不同,使用不同的server
 	ReactDOM.render(React.createElement(_indexInfo2.default, null), document.getElementById('container'));
 
 /***/ },
@@ -1133,6 +1138,26 @@
 	}(_react.Component);
 
 	exports.default = loading;
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var server1 = 'https://production.server.com';
+	var server2 = 'https://dev.server.com';
+
+	var useServer = null;
+	if (false) {
+		useServer = server1;
+	} else if (true) {
+		useServer = server2;
+	}
+	exports.default = useServer;
 
 /***/ }
 /******/ ]);
