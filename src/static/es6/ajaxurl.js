@@ -40,22 +40,32 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(61);
+	module.exports = __webpack_require__(1);
 
 
 /***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
 
-/***/ 61:
-/***/ function(module, exports) {
+	'use strict';
 
-	// 你封装的工具库 
-	"use strict";
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var server1 = 'https://production.server.com';
+	var server2 = 'https://dev.server.com';
+
+	var useServer = null;
+	if (false) {
+		useServer = server1;
+	} else if (true) {
+		useServer = server2;
+	}
+	exports.default = useServer;
 
 /***/ }
-
-/******/ });
+/******/ ]);

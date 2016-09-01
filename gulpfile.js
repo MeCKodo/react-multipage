@@ -158,7 +158,8 @@ gulp.task('js', function () {
 	watch([src.js], function (event) {
 		var paths = watchPath(event, src.js, './src/static/es6/');
 		// console.log(paths.srcPath.split('/'));
-		if(paths.srcPath.split('/').length === 3) { // 共有库情况,要编译所有js
+		var sp = paths.srcPath.indexOf('\\') > -1 ? '\\' : '/';
+		if(paths.srcPath.split(sp).length === 3) { // 共有库情况,要编译所有js
 			compileJS(['./src/js/**/*.js','!./src/js/lib/*.js']);
 		} else { // 否则 只编译变动js
 			compileJS(paths.srcPath);
@@ -168,8 +169,9 @@ gulp.task('js', function () {
 });
 gulp.task('component', function () {
 	
-	watch(['./src/components/**/*.vue'], function (event) {
-		var business = event.path.split('/').slice(-2);
+	watch(['./src/components/**/*.jsx'], function (event) {
+		var sp = event.path.indexOf('\\') > -1 ? '\\' : '/';
+		var business = event.path.split(sp).slice(-2);
 		var jsFile   = business[1].split('-')[0];
 		var path;
 		if (business[0] === 'common') {
