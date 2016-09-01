@@ -264,7 +264,8 @@ function compileJS(path,dest) {
 	return gulp.src(path)
 	.pipe(named(function (file) {
 		var path = JSON.parse(JSON.stringify(file)).history[0];
-		var target = path.split('/js/')[1];
+		var sp = path.indexOf('\\') > -1 ? '\\js\\' : '/js/';
+		var target = path.split(sp)[1];
 		return target.substring(0,target.length - 3);
 	}))
 	.pipe(webpackStream(webpackConfig))
