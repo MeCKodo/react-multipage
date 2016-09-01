@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=production gulp build",
-    "dev": "NODE_ENV=dev gulp reload"
+    "build": "cross-env NODE_ENV=production gulp build",
+    "dev": "cross-env NODE_ENV=dev gulp reload"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +25,7 @@
     "babel-preset-stage-2": "^6.0.0",
     "babel-runtime": "^5.8.0",
     "browser-sync": "^2.9.11",
+    "cross-env": "^2.0.1",
     "css-loader": "^0.23.1",
     "cssnano": "^3.4.0",
     "del": "^2.2.1",
