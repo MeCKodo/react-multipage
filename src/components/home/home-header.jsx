@@ -12,7 +12,7 @@ export default class top extends Component {
 			<header>
 				我是home业务模块下的,header组件,修改了我home业务模块下的js都会被编译
 				<figure >
-					<img style={{display:'block'}} src={require('../../assets/images/home/logo.jpg')} width="100" height="100" />
+					<img style={{display:'block'}} src={require('images/home/logo.jpg')} width="100" height="100" />
 					测试引入资源文件
 				</figure>
 			</header>

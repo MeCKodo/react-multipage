@@ -54,7 +54,8 @@ const webpackConfig = {
 	resolve: {
 		root: path.join(__dirname, 'node_modules'),
 		alias: {
-			components: '../../components' // 组件别名,js里引用路径可直接 'components/xxx/yyy'
+			components: '../../components', // 组件别名,js里引用路径可直接 'components/xxx/yyy'
+			images: '../../assets/images'   // 图像别名,js里引用路径可直接 'images/xxx/yyy.png'
 		},
 		extensions: ['', '.js', '.jsx', '.scss', '.css']
 	},
