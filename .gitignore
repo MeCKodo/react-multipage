@@ -6,3 +6,4 @@ webhook.php
 .inviteimg
 node_modules
 application/const.php
+public/

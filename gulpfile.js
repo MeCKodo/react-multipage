@@ -1,5 +1,6 @@
 // 二哲 - 2016年08月15日
 const path = require('path');
+const fs = require('fs');
 const gulp = require('gulp');
 const ugjs = require('gulp-uglify');
 const watch = require('gulp-watch');
@@ -26,7 +27,30 @@ const revCollector = require('gulp-rev-collector');
 const exec = require('child_process').exec;
 const CDN = 'yourCDNLink';
 
+function getEntry() {
+	var srcDir = './src/js/';
+	var dirs = fs.readdirSync(path.resolve(srcDir));
+	var entry = {};
+
+	dirs.forEach(function (business) {
+		if (business.indexOf('.') < 0 && business !== 'lib') {
+			var jsPath = path.resolve(srcDir, business);
+			var files = fs.readdirSync(jsPath);
+
+			files.forEach(function (item) {
+				var matchs = item.match(/(.+)\.(js|jsx)$/);
+				if (matchs) {
+					var name = business + '/' + matchs[1];
+					entry[name] = srcDir + business + '/' + item;
+				}
+			});
+		}
+	});
+	return entry;
+}
+
 const webpackConfig = {
+	entry: getEntry(),
 	resolve: {
 		root: path.join(__dirname, 'node_modules'),
 		alias: {
