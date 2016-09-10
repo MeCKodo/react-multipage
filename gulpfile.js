@@ -70,7 +70,7 @@ const webpackConfig = {
 	module: {
 		loaders: [
 			{
-				test: /\.js|jsx$/,
+				test: /\.(js|jsx)$/,
 				exclude: /node_modules/,
 				loader: "babel",
 			},
@@ -108,11 +108,11 @@ const processes = [
 const src = {
 	css: './src/static/css/**/*.css',
 	es6: './src/static/es6/**/*.js',
-	fonts: './src/static/fonts/**/*.{eot,svg,ttf,woff}',
-	images: './src/static/images/**/*.{png,jpg,jpeg}',
+	fonts: './src/assets/fonts/**/*.{eot,svg,ttf,woff}',
+	images: './src/assets/images/**/*.{png,jpg,jpeg}',
 	js: './src/js/**/*.js',
 	sass: './src/sass/**/*.scss',
-	components: './src/components/**/*.vue',
+	components: './src/components/**/*.{vue,jsx}',
 	views: './src/views/**/*.html'
 };
 const dist = {
@@ -149,9 +149,8 @@ gulp.task('reload', function () {
 	init();// watch
 });
 gulp.task('css:dev', function () {
-	
-	return gulp.src(src.css)
-	.pipe(gulp.dest(dist.css));
+	//return gulp.src(src.css)
+	//	.pipe(gulp.dest(dist.css));
 });
 gulp.task('css:build', function () {
 	return gulp.src(src.css)
@@ -193,7 +192,7 @@ gulp.task('js', function () {
 });
 gulp.task('component', function () {
 	
-	watch(['./src/components/**/*.jsx'], function (event) {
+	watch([src.components], function (event) {
 		var sp = event.path.indexOf('\\') > -1 ? '\\' : '/';
 		var business = event.path.split(sp).slice(-2);
 		var jsFile   = business[1].split('-')[0];
@@ -262,7 +261,7 @@ function init() {
 			bsReload();
 		});
 	});
-	gulp.start('js', 'component');
+	gulp.start('sass', 'css:dev', 'js:compile', 'js', 'component');
 	watch([src.views]).on('change', function() {
 		runSequence('views', function () {
 			bsReload()
@@ -279,7 +278,6 @@ function init() {
 	});
 	// 初始化无需编译的lib库
 	cp('./src/js/lib/*.js','./src/static/es6/lib');
-	cp('./src/js/lib/*.js','./public/static/es6/lib');
 	cp('./src/assets/images/**/*.*','./src/static/images');
 	cp('./src/assets/fonts/**/*.{eot,svg,ttf,woff}','./src/static/fonts');
 }
@@ -309,8 +307,6 @@ function cp(from,to) {
 }
 
 function build(cb) {
-	cp('./src/assets/images/**/*.*','./src/static/images');
-	cp('./src/assets/fonts/**/*.{eot,svg,ttf,woff}','./src/static/fonts');
 	runSequence('clean','sass', 'css:build','js:build', 'ugjs:build', 'views:build', 'images', 'fonts',function() {
 		// 上传静态资源文件到CDN
 		cb && cb();

@@ -7,3 +7,5 @@ webhook.php
 node_modules
 application/const.php
 public/
+src/tmp/
+src/static/
