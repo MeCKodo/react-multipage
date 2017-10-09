@@ -1,5 +1,6 @@
 // 二哲 - 2016年08月15日
 const path = require('path');
+const fs = require('fs');
 const gulp = require('gulp');
 const ugjs = require('gulp-uglify');
 const watch = require('gulp-watch');
@@ -26,11 +27,35 @@ const revCollector = require('gulp-rev-collector');
 const exec = require('child_process').exec;
 const CDN = 'yourCDNLink';
 
+function getEntry() {
+	var srcDir = './src/js/';
+	var dirs = fs.readdirSync(path.resolve(srcDir));
+	var entry = {};
+
+	dirs.forEach(function (business) {
+		if (business.indexOf('.') < 0 && business !== 'lib') {
+			var jsPath = path.resolve(srcDir, business);
+			var files = fs.readdirSync(jsPath);
+
+			files.forEach(function (item) {
+				var matchs = item.match(/(.+)\.(js|jsx)$/);
+				if (matchs) {
+					var name = business + '/' + matchs[1];
+					entry[name] = srcDir + business + '/' + item;
+				}
+			});
+		}
+	});
+	return entry;
+}
+
 const webpackConfig = {
+	entry: getEntry(),
 	resolve: {
 		root: path.join(__dirname, 'node_modules'),
 		alias: {
-			components: '../../components' // 组件别名,js里引用路径可直接 'components/xxx/yyy'
+			components: '../../components', // 组件别名,js里引用路径可直接 'components/xxx/yyy'
+			images: '../../assets/images'   // 图像别名,js里引用路径可直接 'images/xxx/yyy.png'
 		},
 		extensions: ['', '.js', '.jsx', '.scss', '.css']
 	},
@@ -46,7 +71,7 @@ const webpackConfig = {
 	module: {
 		loaders: [
 			{
-				test: /\.js|jsx$/,
+				test: /\.(js|jsx)$/,
 				exclude: /node_modules/,
 				loader: "babel",
 			},
@@ -84,11 +109,11 @@ const processes = [
 const src = {
 	css: './src/static/css/**/*.css',
 	es6: './src/static/es6/**/*.js',
-	fonts: './src/static/fonts/**/*.{eot,svg,ttf,woff}',
-	images: './src/static/images/**/*.{png,jpg,jpeg}',
+	fonts: './src/assets/fonts/**/*.{eot,svg,ttf,woff}',
+	images: './src/assets/images/**/*.{png,jpg,jpeg}',
 	js: './src/js/**/*.js',
 	sass: './src/sass/**/*.scss',
-	components: './src/components/**/*.vue',
+	components: './src/components/**/*.{vue,jsx}',
 	views: './src/views/**/*.html'
 };
 const dist = {
@@ -125,9 +150,8 @@ gulp.task('reload', function () {
 	init();// watch
 });
 gulp.task('css:dev', function () {
-	
-	return gulp.src(src.css)
-	.pipe(gulp.dest(dist.css));
+	//return gulp.src(src.css)
+	//	.pipe(gulp.dest(dist.css));
 });
 gulp.task('css:build', function () {
 	return gulp.src(src.css)
@@ -169,7 +193,7 @@ gulp.task('js', function () {
 });
 gulp.task('component', function () {
 	
-	watch(['./src/components/**/*.jsx'], function (event) {
+	watch([src.components], function (event) {
 		var sp = event.path.indexOf('\\') > -1 ? '\\' : '/';
 		var business = event.path.split(sp).slice(-2);
 		var jsFile   = business[1].split('-')[0];
@@ -238,7 +262,7 @@ function init() {
 			bsReload();
 		});
 	});
-	gulp.start('js', 'component');
+	gulp.start('sass', 'css:dev', 'js:compile', 'js', 'component');
 	watch([src.views]).on('change', function() {
 		runSequence('views', function () {
 			bsReload()
@@ -255,7 +279,6 @@ function init() {
 	});
 	// 初始化无需编译的lib库
 	cp('./src/js/lib/*.js','./src/static/es6/lib');
-	cp('./src/js/lib/*.js','./public/static/es6/lib');
 	cp('./src/assets/images/**/*.*','./src/static/images');
 	cp('./src/assets/fonts/**/*.{eot,svg,ttf,woff}','./src/static/fonts');
 }
@@ -285,8 +308,6 @@ function cp(from,to) {
 }
 
 function build(cb) {
-	cp('./src/assets/images/**/*.*','./src/static/images');
-	cp('./src/assets/fonts/**/*.{eot,svg,ttf,woff}','./src/static/fonts');
 	runSequence('clean','sass', 'css:build','js:build', 'ugjs:build', 'views:build', 'images', 'fonts',function() {
 		// 上传静态资源文件到CDN
 		cb && cb();
